@@ -1,47 +1,43 @@
-{% set version = "2.2.0" %}
+{% set name = "bactopia" %}
+{% set version = "4.0.0" %}
 
 package:
-  name: bactopia
+  name: {{ name }}
   version: {{ version }}
 
 build:
   number: 0
   noarch: generic
+  run_exports:
+    - {{ pin_subpackage(name, max_pin='x.x') }}
 
 source:
   url: https://github.com/bactopia/bactopia/archive/v{{version}}.tar.gz
-  sha256: 489e531d6bbf13aa183435c03859f5dc4c98e50421e9cf4dca19d598777db326
+  sha256: 81e194a05b826edac6df8faca5df268b7e5c0cf0697d3c2eb03bdd52d8241c00
 
 requirements:
   run:
-    - biopython
-    - blast >=2.11.0
-    - cd-hit
-    - conda
+    - bactopia-py >=2.1.6
+    - conda >=25
     - coreutils
-    - executor
-    - gsl <=2.6
-    - mamba
-    - mash
-    - ncbi-amrfinderplus 3.10.45
-    - ncbi-genome-download
-    - nextflow >=22.10.0
-    - python >3.6,<3.10
-    - requests 
+    - mamba >=2
+    - nextflow >=26
+    - nf-test
+    - python >3.9,<3.14
     - sed
-    - tbb 2020.2
-    - unzip
     - wget
+    - importlib-metadata <5
+    - openpyxl
 
 test:
   commands:
-    - "bactopia --version"
-    - "bactopia datasets --help"
-    - "bactopia prepare"
-    - "bactopia search"
+    - "bactopia --version --verbose"
+    - "bactopia prepare --verbose --help"
+    - "bactopia search --verbose --help"
+    - "bactopia --list_wfs --verbose"
 
 about:
-  home: https://bactopia.github.io/
+  home: https://bactopia.io/
   license: MIT
   license_file: LICENSE
   summary: Bactopia is a flexible pipeline for complete analysis of bacterial genomes.

@@ -1,4 +1,4 @@
-{% set version = '1.5.0' %}
+{% set version = "1.5.4" %}
 
 package:
   name: r-conos
@@ -8,16 +8,19 @@ source:
   url:
     - {{ cran_mirror }}/src/contrib/conos_{{ version }}.tar.gz
     - {{ cran_mirror }}/src/contrib/Archive/conos/conos_{{ version }}.tar.gz
-  sha256: dcf4afbbf3c744e8e4f1bd4472bb4c8f18a1d18d9f2bf854372d12d8e558b0f1
+  sha256: b3018f1b14e5376729472bc04942402d74221b82ded8b790cbbd9c4a4c746999
 
 build:
-  number: 1
+  number: 0
   rpaths:
     - lib/R/lib/
     - lib/
+  run_exports:
+    - {{ pin_subpackage('r-conos', max_pin="x") }}
 
 requirements:
   build:
+    - {{ stdlib('c') }}
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - make
@@ -43,6 +46,7 @@ requirements:
     - r-irlba
     - r-leidenalg
     - r-magrittr
+    - r-pagoda2
     - r-reshape2
     - r-rlang
     - r-sccore >=1.0.0
@@ -68,6 +72,7 @@ requirements:
     - r-irlba
     - r-leidenalg
     - r-magrittr
+    - r-pagoda2
     - r-reshape2
     - r-rlang
     - r-sccore >=1.0.0
@@ -92,3 +97,9 @@ about:
   license_family: GPL3
   license_file:
     - {{ environ["PREFIX"] }}/lib/R/share/licenses/GPL-3
+
+#extra:
+  #additional-platforms:
+    # missing r-pagoda2 for aarch64 and arm64
+    #- linux-aarch64
+    #- osx-arm64

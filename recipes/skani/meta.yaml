@@ -1,0 +1,37 @@
+{% set version = "0.3.2" %}
+
+package:
+  name: skani
+  version: {{ version }}
+
+build:
+  number: 0
+  run_exports:
+    - {{ pin_subpackage('skani', max_pin="x") }}
+
+source:
+  url: https://github.com/bluenote-1577/skani/archive/v{{ version }}.tar.gz
+  sha256: 5cae2fc3b8c57881fd9d3494c372eb8c8703eb69900513bfaef01f8892c55ae0
+
+requirements:
+  build:
+    - {{ compiler("c") }}
+    - {{ compiler("cxx") }}
+    - {{ compiler("rust") }}
+    - make
+
+test:
+  commands:
+    - skani --help
+
+about:
+  home: https://github.com/bluenote-1577/skani
+  license: MIT
+  summary: skani is a fast and robust tool for calculating ANI between metagenome assembled genomes and contigs. 
+    
+extra:
+  additional-platforms:
+    - linux-aarch64
+    - osx-arm64
+  skip-lints:
+    - compiler_needs_stdlib_c

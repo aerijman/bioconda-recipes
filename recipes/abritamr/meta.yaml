@@ -1,51 +1,59 @@
 {% set name = "abritamr" %}
-{% set version = "1.0.12" %}
-{% set sha256 = "e31dd4729129e36cd3d8b4a0461d84de7b6d65d983779eb93df28edaa8e47687" %}
+{% set version = "1.2.0" %}
+{% set sha256 = "784cf71a2a58adea6263fea07a6810bb0fe701dda5e316f454f906f274ec7e8a" %}
 
 package:
-  name: "{{ name|lower }}"
-  version: "{{ version }}"
+  name: {{ name }}
+  version: {{ version }}
 
 source:
-  url: "https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/abritamr-{{ version }}.tar.gz"
-  sha256: "{{ sha256 }}"
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/abritamr-{{ version }}.tar.gz
+  sha256: {{ sha256 }}
 
 build:
-  number: 0
+  number: 1
   noarch: python
   entry_points:
-    - abritamr=abritamr.abritamr:main
-  script: "{{ PYTHON }} -m pip install . --ignore-installed --no-deps -vv"
+    - abritamr = abritamr.abritamr:main
+  script: {{ PYTHON }} -m pip install . --no-build-isolation --no-deps --no-cache-dir -vvv
+  run_exports:
+    - {{ pin_subpackage('abritamr', max_pin="x") }}
 
 requirements:
   host:
     - pip
-    - python=>3.9
-  run:
-    - pandas=>1.4
-    - xlsxwriter
-    - ncbi-amrfinderplus=3.10.16
-    - blast 
-    - hmmer 
+    - python >=3.9
+    - setuptools
     - libcurl
+  run:
+    - python >=3.9
+    - pandas
+    - xlsxwriter
+    - ncbi-amrfinderplus >=4.0.0
+    - parallel
 
 test:
   imports:
-    - abritamr
+    - {{ name }}
   commands:
-    - abritamr --help
+    - {{ name }} --version
+    - {{ name }} --help
+    - {{ name }} run --help
+    - {{ name }} report --help
+    - {{ name }} update_db --help
   requires:
     - nose
     - pytest
 
 about:
-  home: "https://github.com/MDU-PHL/abritamr"
-  license: GPL-3.0-only
+  home: "https://github.com/MDU-PHL/{{ name }}"
+  license: "GPL-3.0-only"
   license_family: GPL3
-  summary: "Running AMRFinderPlus for MDU"
-  dev_url: https://github.com/MDU-PHL/abritamr 
+  licence_file: LICENSE
+  summary: "Idenify bacterial AMR genes and SNPs in genome assemblies"
 
 extra:
   recipe-maintainers:
     - kristyhoran
-    - andergs
+  identifiers:
+    - biotools:{{ name }}

@@ -1,0 +1,43 @@
+{% set name = "TIR-Learner" %}
+{% set version = "4.03" %}
+{% set sha256 = "acdc4c475f9400eff50dc22a38b79e80baa8844d1fa59d77db6b3d958bff2330" %}
+
+package:
+  name: {{ name | lower }}
+  version: {{ version }}
+
+source:
+  url: https://github.com/KGerhardt/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
+  sha256: {{ sha256 }}
+
+build:
+  number: 0
+  noarch: generic
+  run_exports:
+    - {{ pin_subpackage(name | lower, max_pin='x') }}
+
+requirements:
+  run:
+    - python >=3.9,<3.13
+    - numpy
+    - pyfastx
+    - pywfa
+    - keras
+    - pytorch
+    - genometools-genometools
+    - genericrepeatfinder
+    - blast
+    - pigz
+
+test:
+  commands:
+    - tirlearner4 --help
+
+about:
+  home: https://github.com/KGerhardt/{{ name }}
+  summary: "Accelerated tool for identifying TIR transposable elements"
+  license: GPL-3.0-or-later
+  license_family: GPL3
+  license_file: LICENSE
+  dev_url: https://github.com/KGerhardt/{{ name }}
+  doc_url: https://github.com/KGerhardt/{{ name }}/blob/main/README.md

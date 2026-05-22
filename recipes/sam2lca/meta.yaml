@@ -1,49 +1,50 @@
 {% set name = "sam2lca" %}
-{% set version = "1.1.2" %}
+{% set version = "1.1.4" %}
 
 package:
-  name: {{ name|lower }}
+  name: {{ name }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/sam2lca-{{ version }}.tar.gz
-  sha256: 144ee1f31fbc9c3283505e34e7323bd06f00d794e4bbde6a965432c30720310d
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/sam2lca-{{ version }}.tar.gz
+  sha256: c1d26f67458c2ad3ff8541b4ecf672c97c81fd65c91092beefab10cdea6f945b
 
 build:
   entry_points:
     - sam2lca = sam2lca.cli:cli
   noarch: python
-  script: {{ PYTHON }} -m pip install . -vv
+  script: {{ PYTHON }} -m pip install . --no-build-isolation --no-cache-dir --no-deps -vvv
   number: 1
+  run_exports:
+    - {{ pin_subpackage(name, max_pin="x") }}
 
 requirements:
   host:
     - pip
-    - python >=3.7
+    - python >=3.6
+    - setuptools <81  # uses pkg_resources
   run:
+    - python >=3.6
     - click
     - numpy
     - pandas
     - pysam
-    - python >=3.7
     - python-rocksdb
     - scipy
     - taxopy >=0.10.2
     - tqdm
     - xopen
+    - setuptools <81  # uses pkg_resources
 
 test:
   imports:
     - sam2lca
   commands:
-    - pip check
     - sam2lca --help
-  requires:
-    - pip
 
 about:
   home: https://github.com/maxibor/sam2lca
-  summary: Lowest Common Ancestor on SAM/BAM/CRAM alignment files
+  summary: "Lowest Common Ancestor on SAM/BAM/CRAM alignment files."
   license: GPL-3.0
   license_file: LICENSE
 

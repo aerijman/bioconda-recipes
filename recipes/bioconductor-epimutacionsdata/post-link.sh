@@ -1,2 +1,2 @@
 #!/bin/bash
-installBiocDataPackage.sh "epimutacionsdata-1.2.0"
+installBiocDataPackage.sh "epimutacionsdata-1.14.0"

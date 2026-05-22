@@ -1,53 +1,69 @@
 {% set name = "open-cravat" %}
-{% set version = "2.2.9" %}
+{% set version = "3.1.1" %}
 
 package:
   name: "{{ name|lower }}"
   version: "{{ version }}"
 
 source:
-  url: "https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz"
-  sha256: c95b5674ff7fbb114b30fb1ff9a2230a6cd8855303cf47325230523dcf36f76b
+  url: https://files.pythonhosted.org/packages/81/7c/2d1f08e97eeece58b537620aede3be6d950da821e083ecc355ef6392a069/open_cravat-3.1.1.tar.gz
+  sha256: eaafd8126150409d9ed799bfd884b5318d3837755536fcefdabe13b7c911ac97
 
 build:
   number: 0
   entry_points:
     - oc=cravat.oc:main
   noarch: python
-  script: {{PYTHON}} -m pip install . -vv --ignore-installed --no-deps
+  script: {{PYTHON}} -m pip install . -vvv --no-build-isolation --no-deps --no-cache-dir
+  run_exports:
+    - {{ pin_subpackage('open-cravat', max_pin="x") }}
 
 requirements:
   host:
     - pip
-    - python
+    - python >=3.9
+    - setuptools
   run:
-    - aiohttp
+    - aiohttp <4.0.0
     - aiosqlite
-    - chardet >=3.0.4
+    - biopython
+    - chardet >=3.0.4,<6.0.0
     - intervaltree
     - markdown
+    - mpmath
     - nest-asyncio
     - openpyxl
     - oyaml
     - psutil
     - pyliftover
-    - python
+    - python >=3.9
+    - setuptools
     - pyyaml
     - requests
     - requests-toolbelt
     - twobitreader
     - websockets
     - xlsxwriter
-    - pyvcf
+    - pyvcf3
+    - looseversion
+    - packaging >=25.0.0
+    - flask
+    - paste
+    - waitress
+    - whitenoise
+    - flask-caching
+    - cachelib
+    - celery
+    - cryptography
 
 test:
   imports:
     - cravat
 
 about:
-  home: "http://www.opencravat.org"
-  license: GPL v3
-  license_family: GPL
+  home: "https://www.opencravat.org"
+  license: MIT
+  license_family: MIT
   license_file: LICENSE
   summary: "OpenCRAVAT - variant analysis toolkit"
   doc_url: https://github.com/KarchinLab/open-cravat/wiki

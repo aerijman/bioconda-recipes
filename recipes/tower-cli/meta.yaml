@@ -1,0 +1,35 @@
+{% set name = "tw"%}
+{% set version = "0.32.0" %}
+{% set sha256 = "666c3535fc7f90a5cb21397f6e9f949e4641b3c2e7be2e7238b2bcf590c33cde" %}
+
+package:
+  name: tower-cli
+  version: {{ version }}
+
+source:
+  url: https://github.com/seqeralabs/tower-cli/releases/download/v{{ version }}/tw-jar.jar
+  sha256: {{ sha256 }}
+
+build:
+  number: 0
+  noarch: generic
+  run_exports:
+    - {{ pin_subpackage("tower-cli", max_pin="x.x") }}
+
+requirements:
+  run:
+    - openjdk >=17
+
+test:
+  commands:
+    - tw --help
+    - tw organizations --help
+
+about:
+  home: "https://github.com/seqeralabs/tower-cli"
+  license: "Apache-2.0"
+  license_family: APACHE
+  license_file: "LICENSE.txt"
+  summary: "The Tower CLI an interface to Nextflow Tower via the CLI."
+  dev_url: "https://github.com/seqeralabs/tower-cli"
+  doc_url: "https://docs.seqera.io/platform-cloud/platform-cloud"

@@ -1,34 +1,44 @@
-{% set version = "1.32.0" %}
+{% set version = "1.44.0" %}
 {% set name = "MSnID" %}
-{% set bioc = "3.16" %}
+{% set bioc = "3.22" %}
 
 package:
-  name: 'bioconductor-{{ name|lower }}'
+  name: bioconductor-{{ name|lower }}
   version: '{{ version }}'
+
 source:
   url:
-    - 'https://bioconductor.org/packages/{{ bioc }}/bioc/src/contrib/{{ name }}_{{ version }}.tar.gz'
-    - 'https://bioarchive.galaxyproject.org/{{ name }}_{{ version }}.tar.gz'
-    - 'https://depot.galaxyproject.org/software/bioconductor-{{ name|lower }}/bioconductor-{{ name|lower }}_{{ version }}_src_all.tar.gz'
-  md5: a3fbc76e3678abed4b9837d7908a1523
+    - https://bioconductor.org/packages/{{ bioc }}/bioc/src/contrib/{{ name }}_{{ version }}.tar.gz
+    - https://bioconductor.org/packages/{{ bioc }}/bioc/src/contrib/Archive/{{ name }}/{{ name }}_{{ version }}.tar.gz
+    - https://bioarchive.galaxyproject.org/{{ name }}_{{ version }}.tar.gz
+    - https://depot.galaxyproject.org/software/bioconductor-{{ name|lower }}/bioconductor-{{ name|lower }}_{{ version }}_src_all.tar.gz
+  md5: b79fe84c2b10c5477d258b832e2555ae
+
 build:
   number: 0
   rpaths:
     - lib/R/lib/
     - lib/
+  run_exports: '{{ pin_subpackage("bioconductor-msnid", max_pin="x.x") }}'
+
 requirements:
+
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+
   host:
-    - 'bioconductor-annotationdbi >=1.60.0,<1.61.0'
-    - 'bioconductor-annotationhub >=3.6.0,<3.7.0'
-    - 'bioconductor-biobase >=2.58.0,<2.59.0'
-    - 'bioconductor-biocgenerics >=0.44.0,<0.45.0'
-    - 'bioconductor-biocstyle >=2.26.0,<2.27.0'
-    - 'bioconductor-biostrings >=2.66.0,<2.67.0'
-    - 'bioconductor-msmstests >=1.36.0,<1.37.0'
-    - 'bioconductor-msnbase >=2.24.0,<2.25.0'
-    - 'bioconductor-mzid >=1.36.0,<1.37.0'
-    - 'bioconductor-mzr >=2.32.0,<2.33.0'
-    - 'bioconductor-protgenerics >=1.30.0,<1.31.0'
+    - bioconductor-annotationdbi >=1.72.0,<1.73.0
+    - bioconductor-annotationhub >=4.0.0,<4.1.0
+    - bioconductor-biobase >=2.70.0,<2.71.0
+    - bioconductor-biocgenerics >=0.56.0,<0.57.0
+    - bioconductor-biocstyle >=2.38.0,<2.39.0
+    - bioconductor-biostrings >=2.78.0,<2.79.0
+    - bioconductor-msmstests >=1.48.0,<1.49.0
+    - bioconductor-msnbase >=2.36.0,<2.37.0
+    - bioconductor-mzid >=1.48.0,<1.49.0
+    - bioconductor-mzr >=2.44.0,<2.45.0
+    - bioconductor-protgenerics >=1.42.0,<1.43.0
     - r-base
     - r-data.table
     - r-doparallel
@@ -47,18 +57,21 @@ requirements:
     - r-xtable
     - libblas
     - liblapack
+    - zlib
+    - liblzma-devel
+
   run:
-    - 'bioconductor-annotationdbi >=1.60.0,<1.61.0'
-    - 'bioconductor-annotationhub >=3.6.0,<3.7.0'
-    - 'bioconductor-biobase >=2.58.0,<2.59.0'
-    - 'bioconductor-biocgenerics >=0.44.0,<0.45.0'
-    - 'bioconductor-biocstyle >=2.26.0,<2.27.0'
-    - 'bioconductor-biostrings >=2.66.0,<2.67.0'
-    - 'bioconductor-msmstests >=1.36.0,<1.37.0'
-    - 'bioconductor-msnbase >=2.24.0,<2.25.0'
-    - 'bioconductor-mzid >=1.36.0,<1.37.0'
-    - 'bioconductor-mzr >=2.32.0,<2.33.0'
-    - 'bioconductor-protgenerics >=1.30.0,<1.31.0'
+    - bioconductor-annotationdbi >=1.72.0,<1.73.0
+    - bioconductor-annotationhub >=4.0.0,<4.1.0
+    - bioconductor-biobase >=2.70.0,<2.71.0
+    - bioconductor-biocgenerics >=0.56.0,<0.57.0
+    - bioconductor-biocstyle >=2.38.0,<2.39.0
+    - bioconductor-biostrings >=2.78.0,<2.79.0
+    - bioconductor-msmstests >=1.48.0,<1.49.0
+    - bioconductor-msnbase >=2.36.0,<2.37.0
+    - bioconductor-mzid >=1.48.0,<1.49.0
+    - bioconductor-mzr >=2.44.0,<2.45.0
+    - bioconductor-protgenerics >=1.42.0,<1.43.0
     - r-base
     - r-data.table
     - r-doparallel
@@ -75,17 +88,17 @@ requirements:
     - r-stringr
     - r-tibble
     - r-xtable
-  build:
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
+
 test:
   commands:
-    - '$R -e "library(''{{ name }}'')"'
+    - $R -e "library('{{ name }}')"
+
 about:
-  home: 'https://bioconductor.org/packages/{{ bioc }}/bioc/html/{{ name }}.html'
+  home: https://bioconductor.org/packages/{{ bioc }}/bioc/html/{{ name }}.html
   license: Artistic-2.0
-  summary: 'Utilities for Exploration and Assessment of Confidence of LC-MSn Proteomics Identifications'
-  description: 'Extracts MS/MS ID data from mzIdentML (leveraging mzID package) or text files. After collating the search results from multiple datasets it assesses their identification quality and optimize filtering criteria to achieve the maximum number of identifications while not exceeding a specified false discovery rate. Also contains a number of utilities to explore the MS/MS results and assess missed and irregular enzymatic cleavages, mass measurement accuracy, etc.'
+  summary: Utilities for Exploration and Assessment of Confidence of LC-MSn Proteomics Identifications
+  description: Extracts MS/MS ID data from mzIdentML (leveraging mzID package) or text files. After collating the search results from multiple datasets it assesses their identification quality and optimize filtering criteria to achieve the maximum number of identifications while not exceeding a specified false discovery rate. Also contains a number of utilities to explore the MS/MS results and assess missed and irregular enzymatic cleavages, mass measurement accuracy, etc.
+
 extra:
   identifiers:
     - biotools:msnid

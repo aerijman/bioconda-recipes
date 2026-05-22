@@ -1,0 +1,35 @@
+{% set name = "pbstarphase" %}
+{% set version = "2.1.0" %}
+{% set sha256 = "3cbfda34061608d46228ea34ec309eefbf8d7029f19d8b2b5278ab5a620839b2" %}
+
+package:
+  name: {{ name }}
+  version: {{ version }}
+
+source:
+  url: https://github.com/PacificBiosciences/pb-StarPhase/releases/download/v{{ version }}/pbstarphase-v{{ version }}-x86_64-unknown-linux-gnu.tar.gz
+  sha256: {{ sha256 }}
+
+build:
+  number: 0
+  skip: True  # [osx]
+  run_exports:
+    - {{ pin_subpackage('pbstarphase', max_pin="x") }}
+
+test:
+  commands:
+    - pbstarphase --version
+
+about:
+  home: https://github.com/PacificBiosciences/pb-StarPhase
+  license: BSD-3-Clause-Clear
+  summary: A phase-aware pharmacogenomic diplotyper for PacBio sequencing data
+
+extra:
+  recipe-maintainers:
+    - holtjma
+    - ctsa
+    - zeeev
+  skip-lints:
+    - should_use_compilers
+    - should_be_noarch_generic

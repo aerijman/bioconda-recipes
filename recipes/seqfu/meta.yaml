@@ -1,6 +1,6 @@
 {% set name = "seqfu" %}
-{% set version = "1.16.0" %}
-{% set sha256 = "b5858cdedace1af3d167c60012ea2803d763304d42d86a4d6ca889f2aae36811" %}
+{% set version = "1.26.0" %}
+{% set sha256 = "2b3aa5d6f983aed570d26b0cf48d910f847704d57401ef64e5b026de3dd0afff" %}
 
 package:
   name: {{ name }}
@@ -12,18 +12,25 @@ source:
 
 build:
   number: 0
+  skip: True  # [win]
+  run_exports:
+    - {{ pin_subpackage(name, max_pin="x") }}
 
 requirements:
   build:
     - {{ compiler('c') }}
-    - nim
+    - {{ compiler('cxx') }}
+    - nim >=2.0.8  # [not arm64]
+    - make
+    - pkg-config
+    - coreutils
   host:
-    - zlib
+    - curl
     - pcre
+    - zlib
   run:
-    - zlib
     - pcre
-    
+
 test:
   commands:
     - seqfu
@@ -32,19 +39,26 @@ test:
     - "seqfu --version | grep '{{ version }}'"
 
 about:
-  home: https://github.com/telatin/seqfu2/
-  docs: https://telatin.github.io/seqfu2
-  license: GPL-3.0-only
+  home: "https://github.com/telatin/seqfu2"
+  docs: "https://telatin.github.io/seqfu2"
+  license: "GPL-3.0-only"
+  license_family: GPL3
   license_file: LICENSE
-  summary: 'DNA sequence utilities'
+  summary: "DNA sequence utilities."
   description: |
     A collection of utilities to work with FASTX (FASTA or FASTQ) files
     that accept gzipped input.
     Tools to interleave and deinterleave, to calculate stats, and extract
     portions of sequence datasets.
+
 extra:
+  additional-platforms:
+    - linux-aarch64
+    - osx-arm64
   recipe-maintainers:
     - telatin
   identifiers:
     - biotools:{{ name }}
     - doi:10.3390/bioengineering8050059
+  skip-lints:
+    - compiler_needs_stdlib_c

@@ -1,0 +1,71 @@
+{% set version = "2.0.1" %}
+
+package:
+  name: gapseq
+  version: {{ version }}
+
+source:
+  url: https://github.com/jotech/gapseq/archive/refs/tags/v{{ version}}.tar.gz
+  sha256: 2c0b57d3c718b8554d3dc39c7d2bfaa03a3830bd71fa11b547c956f34f2f3f4c
+
+build:
+  number: 0
+  noarch: generic
+  run_exports:
+    - {{ pin_subpackage('gapseq', max_pin="x") }}
+
+requirements:
+  run:
+    - r-base
+    - diamond >=2.1.9
+    - pyrodigal
+    - gawk
+    - sed
+    - grep
+    - bc
+    - coreutils
+    - wget
+    - openssl
+    - glpk
+    - hmmer
+    - blast
+    - libsbml 
+    - r-data.table
+    - r-stringr
+    - r-stringi
+    - r-getopt
+    - r-r.utils
+    - r-cobrar >=0.2.5
+    - r-biocmanager
+    - bioconductor-biostrings
+    - r-jsonlite
+    - r-renv
+    - r-rcurl
+    - r-httr
+
+
+test:
+  commands:
+    - gapseq test
+
+about:
+  home: https://github.com/jotech/gapseq
+  summary: Informed prediction and analysis of bacterial metabolic pathways and genome-scale networks
+  description: |
+    gapseq predicts bacterial metabolic pathways and reconstructs
+    genome-scale metabolic models.
+
+    After installation, initialize the required databases with:
+
+      gapseq update-sequences -t Bacteria
+      gapseq update-sequences -t Archaea
+
+  license_family: GPL
+  license: AGPL-3.0-only
+  license_file: LICENSE
+extra:
+  recipe-maintainers:
+    - cmkobel
+    - jotech
+    - Waschina
+

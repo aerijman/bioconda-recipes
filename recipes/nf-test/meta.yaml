@@ -1,4 +1,4 @@
-{% set version = "0.7.1" %}
+{% set version = "0.9.5" %}
 
 
 package:
@@ -8,18 +8,20 @@ package:
 build:
   number: 0
   noarch: generic
+  run_exports:
+    - {{ pin_subpackage("nf-test", max_pin="x.x") }}
 
 source:
   url: https://github.com/askimed/nf-test/releases/download/v{{version}}/nf-test-{{version}}.tar.gz
-  sha256: 8d0e3cdc111f204ca6e3239f7da25349f3e0bc49f4cf1da7c5dc41ad36cee729
+  sha256: b7679eb90cdc9642bfa89e9634db02ce6e699de53ad35ef0e2f4847634fc1641
 
 requirements:
   host:
-    - openjdk >=11,<=18
+    - openjdk >=17,<26
     - coreutils
     - curl
   run:
-    - openjdk >=11,<=18
+    - openjdk >=17,<26
     - coreutils
     - curl
 

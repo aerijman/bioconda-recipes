@@ -1,4 +1,4 @@
-{% set version = "0.8.0" %}
+{% set version = "0.15.0" %}
 
 package:
   name: alevin-fry
@@ -6,14 +6,18 @@ package:
 
 build:
   number: 0
+  run_exports:
+    - {{ pin_subpackage("alevin-fry", max_pin="x.x") }}
 
 source:
-  url: https://github.com/COMBINE-lab/alevin-fry/archive/v{{ version }}.tar.gz
-  sha256: ee1c8745ce75060cf8240b8b0229711e709377b9cdf03eb2a73967eedac40939
+  url: https://github.com/COMBINE-lab/alevin-fry/releases/download/v{{ version }}/source.tar.gz
+  sha256: bc841ad5de193c4d6181f608109d5618c71d05ab660c75b9095ca7fc4c78cf72
+  #patches:
+  #  - use-libradicl-0.8.2.patch
 
 requirements:
   build:
-    - rust >=1.60  
+    - {{ compiler('rust') }} 
     - cmake
     - autoconf
     - make
@@ -31,3 +35,10 @@ about:
   license: BSD 3-Clause
   license_file: LICENSE
   summary: alevin-fry is a tool for the efficient processing of single-cell data based on RAD files produced by alevin
+
+extra:
+  skip-lints: 
+    - compiler_needs_stdlib_c
+  additional-platforms:
+    - linux-aarch64
+    - osx-arm64

@@ -1,13 +1,13 @@
 {% set name = "AMPcombi" %}
-{% set version = "0.1.7" %}
+{% set version = "3.0.0" %}
 
 package:
   name: "{{ name|lower }}"
   version: "{{ version }}"
 
 source:
-  url: "https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz"
-  sha256: a73ab40cc80670f403aa629d1c1d7318ce21cc952618fdc1eba0ef667fae3578
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/ampcombi-{{ version }}.tar.gz
+  sha256: 2607007a9dd9cc79eb53e094a2be396e567ab8afaaf1e67c98c2133408e25af8
 
 build:
   noarch: python
@@ -15,24 +15,28 @@ build:
   entry_points:
     - ampcombi = ampcombi:main
   script: "{{ PYTHON }} -m pip install . -vv"
+  run_exports:
+    - {{ pin_subpackage("ampcombi", max_pin="x.x") }}
 
 requirements:
   host:
     - pandas
     - pip
-    - python >=3.9
+    - python ==3.11
   run:
-    - pandas
+    - pandas ==1.5.2
     - requests
     - parsedatetime
     - subprocess32
-    - biopython
+    - biopython ==1.80
     - backports.tempfile
     - contextlib2
-    - diamond
     - openpyxl
+    - numpy ==1.26.4
     - jsonschema
-    - python >=3.9
+    - python ==3.11
+    - colorama ==0.4.6
+    - mmseqs2 ==15.6f452
 
 test:
   imports:
@@ -41,14 +45,15 @@ test:
     - ampcombi --help
 
 about:
-  home: "https://github.com/Darcy220606/AMPcombi"
+  home: "https://github.com/paleobiotechnology/AMPcombi"
   license: MIT
   license_family: MIT
   summary: "A parsing tool to convert and summarise the outputs from multiple AMP detection tools."
-  doc_url: "https://github.com/Darcy220606/AMPcombi"
-  dev_url: "https://github.com/Darcy220606/AMPcombi/tree/dev"
+  doc_url: "https://ampcombi.readthedocs.io"
+  dev_url: "https://github.com/paleobiotechnology/AMPcombi/tree/dev"
 
 extra:
   recipe-maintainers:
     - darcy220606
     - louperelo
+    - jasmezz

@@ -1,6 +1,6 @@
 {% set name = "mlst" %}
-{% set version = "2.23.0" %}
-{% set sha256 = "35bdbde309ba25293c3cce417d82e79594b9f78365133062923dc3d629bd8846" %}
+{% set version = "2.33.1" %}
+{% set sha256 = "8c68a09057fde12fc15ab95f594bfe607085eca613ca0c7640d48089bc58d964" %}
 {% set user = "tseemann" %}
 
 package:
@@ -14,16 +14,19 @@ source:
 build:
   number: 0
   noarch: generic
+  run_exports:
+    - {{ pin_subpackage('mlst', max_pin="x.x") }}
 
 requirements:
   run:
     - any2fasta
-    - blast >=2.9.0
+    - blast >=2.16.0
     - perl
     - perl-bioperl >=1.7.2
-    - perl-moo
-    - perl-list-moreutils
+    - perl-file-which
     - perl-json
+    - perl-list-moreutils
+    - perl-moo
     - zlib
 
 test:
