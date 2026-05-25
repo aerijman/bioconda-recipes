@@ -11,6 +11,8 @@ source:
 
 build:
   number: 0
+  run_exports:
+    - {{ pin_subpackage('tasmanian-mismatch', max_pin='x') }}
   script: |
     cargo build --release --locked
     install -Dm755 target/release/tasmanian-mismatch $PREFIX/bin/tasmanian-mismatch
@@ -21,7 +23,8 @@ requirements:
   build:
     - {{ compiler('rust') }}
     - {{ compiler('c') }}
-    - python  # only if build scripts require it
+    - {{ stdlib('c') }}
+    - python
 
   run:
     - python >=3.10,<3.13
@@ -39,12 +42,13 @@ about:
   home: "https://github.com/nebiolabs/tasmanian-mismatch"
   license: "LGPL-2.1-or-later"
   license_family: LGPL
+  license_file: LICENSE.txt
   summary: "Tasmanian tool to analyze mismatches in sequencing data (Rust + Python hybrid)."
   description: |
     Version 2.x is a Rust-based rewrite of tasmanian-mismatch.
     Some functionality relies on Python components, which are installed
     via Conda (pixi is not used in this environment).
-    
+
     The original Python-only implementation is available in 1.x releases.
   dev_url: "https://github.com/nebiolabs/tasmanian-mismatch"
 
