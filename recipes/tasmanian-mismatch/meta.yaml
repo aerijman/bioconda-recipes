@@ -27,13 +27,23 @@ build:
     export CXXFLAGS="${CXXFLAGS}"
     export LDFLAGS="${LDFLAGS}"
 
+    # Also provide target-qualified vars (these are what the log shows Cargo probing)
+    export TARGET="${TARGET:-x86_64-unknown-linux-gnu}"
+    export CC_x86_64_unknown_linux_gnu="${CC}"
+    export CXX_x86_64_unknown_linux_gnu="${CXX}"
+    export AR_x86_64_unknown_linux_gnu="${AR}"
+    export RANLIB_x86_64_unknown_linux_gnu="${RANLIB}"
+    export CFLAGS_x86_64_unknown_linux_gnu="${CFLAGS}"
+    export CXXFLAGS_x86_64_unknown_linux_gnu="${CXXFLAGS}"
+    export LDFLAGS_x86_64_unknown_linux_gnu="${LDFLAGS}"
+
     cargo build --release --locked
 
     install -Dm755 target/release/tasmanian-mismatch        "$PREFIX/bin/tasmanian-mismatch"
     install -Dm755 target/release/tasmanian-diagnostics     "$PREFIX/bin/tasmanian-diagnostics"
     install -Dm755 target/release/tasmanian-rescale-quality "$PREFIX/bin/tasmanian-rescale-quality"
 
-requirements:
+  requirements:
   build:
     - {{ compiler('rust') }}
     - cargo-bundle-licenses
@@ -42,7 +52,7 @@ requirements:
     - {{ stdlib('c') }}
     - make
   run:
-    - python >=3.10,<3.13
+    - python >=3.10
     - bokeh >=3,<4
     - polars >=0.20,<2
     - pandas
