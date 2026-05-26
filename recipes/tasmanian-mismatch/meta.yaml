@@ -38,7 +38,7 @@ build:
     export CXXFLAGS_x86_64_unknown_linux_gnu="${CXXFLAGS}"
     export LDFLAGS_x86_64_unknown_linux_gnu="${LDFLAGS}"
 
-    cargo build --release --locked
+    cargo build --release --locked -vv
 
     install -Dm755 target/release/tasmanian-mismatch        "$PREFIX/bin/tasmanian-mismatch"
     install -Dm755 target/release/tasmanian-diagnostics     "$PREFIX/bin/tasmanian-diagnostics"
