@@ -24,8 +24,8 @@ requirements:
     - {{ compiler('rust') }}
     - {{ compiler('c') }}
     - {{ stdlib('c') }}
-    - python
-
+    - python >=3.10,<3.13
+    - make
   run:
     - python >=3.10,<3.13
     - bokeh >=3,<4
