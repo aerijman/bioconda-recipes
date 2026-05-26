@@ -19,26 +19,35 @@ build:
 
     export CARGO_PROFILE_RELEASE_LTO=false
 
-    # Ensure cargo uses conda toolchain + flags
-    export CC="${CC}"
-    export CXX="${CXX}"
-    export AR="${AR}"
-    export RANLIB="${RANLIB}"
-    export CFLAGS="${CFLAGS}"
-    export CXXFLAGS="${CXXFLAGS}"
-    export LDFLAGS="${LDFLAGS}"
+    # Determine cargo target triple used for env var names (cc-rs convention)
+    export TARGET="${TARGET:-$(rustc -vV | sed -n 's/^host: //p')}"
+    target_env="${TARGET//-/_}"
 
-    # Also provide target-qualified vars (these are what the log shows Cargo probing)
-    export TARGET="${TARGET:-x86_64-unknown-linux-gnu}"
-    export CC_x86_64_unknown_linux_gnu="${CC}"
-    export CXX_x86_64_unknown_linux_gnu="${CXX}"
-    export AR_x86_64_unknown_linux_gnu="${AR}"
-    export RANLIB_x86_64_unknown_linux_gnu="${RANLIB}"
-    export CFLAGS_x86_64_unknown_linux_gnu="${CFLAGS}"
-    export CXXFLAGS_x86_64_unknown_linux_gnu="${CXXFLAGS}"
-    export LDFLAGS_x86_64_unknown_linux_gnu="${LDFLAGS}"
+    # Only set toolchain vars if they exist (avoid exporting empty strings)
+    if [[ -n "${CC:-}" ]]; then
+      export "CC_${target_env}=${CC}"
+    fi
+    if [[ -n "${CXX:-}" ]]; then
+      export "CXX_${target_env}=${CXX}"
+    fi
+    if [[ -n "${AR:-}" ]]; then
+      export "AR_${target_env}=${AR}"
+    fi
+    if [[ -n "${RANLIB:-}" ]]; then
+      export "RANLIB_${target_env}=${RANLIB}"
+    fi
 
-    cargo build --release --locked -vv
+    if [[ -n "${CFLAGS:-}" ]]; then
+      export "CFLAGS_${target_env}=${CFLAGS}"
+    fi
+    if [[ -n "${CXXFLAGS:-}" ]]; then
+      export "CXXFLAGS_${target_env}=${CXXFLAGS}"
+    fi
+    if [[ -n "${LDFLAGS:-}" ]]; then
+      export "LDFLAGS_${target_env}=${LDFLAGS}"
+    fi
+
+    cargo build --release --locked
 
     install -Dm755 target/release/tasmanian-mismatch        "$PREFIX/bin/tasmanian-mismatch"
     install -Dm755 target/release/tasmanian-diagnostics     "$PREFIX/bin/tasmanian-diagnostics"
