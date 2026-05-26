@@ -13,21 +13,21 @@ build:
   number: 0
   run_exports:
     - {{ pin_subpackage('tasmanian-mismatch', max_pin='x') }}
-  script:
-    - {{ cargo_build() }}
-    - install -Dm755 target/${CARGO_BUILD_TARGET}/release/tasmanian-mismatch $PREFIX/bin/tasmanian-mismatch
-    - install -Dm755 target/${CARGO_BUILD_TARGET}/release/tasmanian-diagnostics $PREFIX/bin/tasmanian-diagnostics
-    - install -Dm755 target/${CARGO_BUILD_TARGET}/release/tasmanian-rescale-quality $PREFIX/bin/tasmanian-rescale-quality
+  script: |
+    cargo build --release --locked
+    install -Dm755 target/release/tasmanian-mismatch $PREFIX/bin/tasmanian-mismatch
+    install -Dm755 target/release/tasmanian-diagnostics $PREFIX/bin/tasmanian-diagnostics
+    install -Dm755 target/release/tasmanian-rescale-quality $PREFIX/bin/tasmanian-rescale-quality
+
 requirements:
   build:
     - {{ compiler('rust') }}
+    - cargo-bundle-licenses
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - {{ stdlib('c') }}
-    - make 
-    - cargo-bundle-licenses
-  host:
     - python >=3.10,<3.13
+    - make
   run:
     - python >=3.10,<3.13
     - bokeh >=3,<4
