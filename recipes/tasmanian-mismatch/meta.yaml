@@ -11,13 +11,25 @@ source:
 
 build:
   number: 0
-  run_exports:
-    - {{ pin_subpackage('tasmanian-mismatch', max_pin='x') }}
   script: |
+    set -euxo pipefail
+
+    export CARGO_PROFILE_RELEASE_LTO=false
+
+    # Ensure cargo uses conda toolchain + flags
+    export CC="${CC}"
+    export CXX="${CXX}"
+    export AR="${AR}"
+    export RANLIB="${RANLIB}"
+    export CFLAGS="${CFLAGS}"
+    export CXXFLAGS="${CXXFLAGS}"
+    export LDFLAGS="${LDFLAGS}"
+
     cargo build --release --locked
-    install -Dm755 target/release/tasmanian-mismatch $PREFIX/bin/tasmanian-mismatch
-    install -Dm755 target/release/tasmanian-diagnostics $PREFIX/bin/tasmanian-diagnostics
-    install -Dm755 target/release/tasmanian-rescale-quality $PREFIX/bin/tasmanian-rescale-quality
+
+    install -Dm755 target/release/tasmanian-mismatch        "$PREFIX/bin/tasmanian-mismatch"
+    install -Dm755 target/release/tasmanian-diagnostics     "$PREFIX/bin/tasmanian-diagnostics"
+    install -Dm755 target/release/tasmanian-rescale-quality "$PREFIX/bin/tasmanian-rescale-quality"
 
 requirements:
   build:
@@ -26,7 +38,6 @@ requirements:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - {{ stdlib('c') }}
-    - python >=3.10,<3.13
     - make
   run:
     - python >=3.10,<3.13
