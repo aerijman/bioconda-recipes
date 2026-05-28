@@ -60,6 +60,8 @@ requirements:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - {{ stdlib('c') }}
+
+    - clangdev
     - make
   run:
     - python >=3.10
