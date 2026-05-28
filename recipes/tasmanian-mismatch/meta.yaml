@@ -11,7 +11,6 @@ source:
 
 build:
   number: 0
-  noarch: generic
   run_exports:
     - {{ pin_subpackage('tasmanian-mismatch', max_pin='x') }}
   script: |
@@ -47,13 +46,14 @@ build:
       export "LDFLAGS_${target_env}=${LDFLAGS}"
     fi
 
+    cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
     cargo build --release --locked
 
     install -Dm755 target/release/tasmanian-mismatch        "$PREFIX/bin/tasmanian-mismatch"
     install -Dm755 target/release/tasmanian-diagnostics     "$PREFIX/bin/tasmanian-diagnostics"
     install -Dm755 target/release/tasmanian-rescale-quality "$PREFIX/bin/tasmanian-rescale-quality"
 
-  requirements:
+requirements:
   build:
     - {{ compiler('rust') }}
     - cargo-bundle-licenses
@@ -77,7 +77,9 @@ about:
   home: "https://github.com/nebiolabs/tasmanian-mismatch"
   license: "LGPL-2.1-or-later"
   license_family: LGPL
-  license_file: LICENSE.txt
+  license_file:
+    - LICENSE.txt
+    - THIRDPARTY.yml
   summary: "Tasmanian tool to analyze mismatches in sequencing data (Rust + Python hybrid)."
   description: |
     Version 2.x is a Rust-based rewrite of tasmanian-mismatch.
@@ -90,3 +92,5 @@ about:
 extra:
   recipe-maintainers:
     - aerijman
+  skip-lints:
+    - should_be_noarch_generic
